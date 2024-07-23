@@ -17,7 +17,7 @@ namespace Game.Code.Controllers
         public void Initialize()
         {
             _model.Score = 0;
-            _view.SetScore(_model.Score.ToString());
+            
         }
 
         public void AddScore(int value)
@@ -29,6 +29,7 @@ namespace Game.Code.Controllers
         public void SetViewActive(bool isActive)
         {
             _view.SetActive(isActive);
+            _view.SetScore(_model.Score.ToString());
         }
     }
 }

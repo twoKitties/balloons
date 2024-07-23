@@ -8,7 +8,7 @@ namespace Game.Code.EntryPoints
         private void Awake()
         {
             DontDestroyOnLoad(gameObject);
-            var loading = new SceneLoadingService().LoadAsync("Menu", null);
+            var loading = new SceneLoadingService().LoadAsync("Core", null);
             StartCoroutine(loading);
         }
     }

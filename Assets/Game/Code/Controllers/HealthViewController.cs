@@ -49,14 +49,14 @@ namespace Game.Code.Controllers
             EnableHealthViews(_model.Current);
         }
 
-        private void EnableHealthViews(int activeViewsCount)
-        {
-            _view.SetCount(activeViewsCount);
-        }
-
         public void SetViewActive(bool isActive)
         {
             _view.SetActive(isActive);
+        }
+
+        private void EnableHealthViews(int activeViewsCount)
+        {
+            _view.SetCount(activeViewsCount);
         }
     }
 }

@@ -7,6 +7,7 @@ namespace Game.Code.Core
         public enum State
         {
             None,
+            Start,
             NextWave,
             ShowResult,
             BalloonPopped,
@@ -21,19 +22,22 @@ namespace Game.Code.Core
         private readonly HealthViewController _healthViewController;
         private readonly BalloonController _balloonController;
         private readonly SoundController _soundController;
+        private readonly StartViewController _startViewController;
 
         public GameStateMachine(
             GameScoreViewController gameScoreViewController, 
             FinalScoreViewController finalScoreViewController, 
             HealthViewController healthViewController, 
             BalloonController balloonController,
-            SoundController soundController)
+            SoundController soundController,
+            StartViewController startViewController)
         {
             _gameScoreViewController = gameScoreViewController;
             _finalScoreViewController = finalScoreViewController;
             _healthViewController = healthViewController;
             _balloonController = balloonController;
             _soundController = soundController;
+            _startViewController = startViewController;
         }
 
 
@@ -42,6 +46,16 @@ namespace Game.Code.Core
             CurrentState = state;
             switch (state)
             {
+                case State.Start:
+                    _startViewController.Initialize();
+                    _startViewController.SetViewActive(true);
+                    _finalScoreViewController.Initialize();
+                    _balloonController.Initialize();
+                    _gameScoreViewController.Initialize();
+                    _gameScoreViewController.SetViewActive(false);
+                    _healthViewController.Initialize();
+                    _healthViewController.SetViewActive(false);
+                    break;
                 case State.NextWave:
                     _balloonController.Spawn();
                     break;
@@ -58,6 +72,7 @@ namespace Game.Code.Core
                     _healthViewController.Take(1);
                     break;
                 case State.Restart:
+                    _startViewController.SetViewActive(false);
                     _finalScoreViewController.Reset();
                     _gameScoreViewController.Initialize();
                     _gameScoreViewController.SetViewActive(true);

@@ -32,20 +32,16 @@ namespace Game.Code.EntryPoints
                 Waves = resourcesInitializer.WaveConfig.Waves,
             };
 
+            var startViewController = new StartViewController(gameStateModel, uiFactory.CreateStartView());
             var gameScoreViewController = new GameScoreViewController(gameStateModel, uiFactory.CreateGameScoreView());
             var healthViewController = new HealthViewController(healthModel, uiFactory.CreateHealthView());
             var finalScoreViewController = new FinalScoreViewController(gameStateModel, uiFactory.CreateFinalScoreView());
             var soundController = new SoundController(_audioSource, resourcesInitializer.PopSound);
             _balloonController = new BalloonController(gameFactory, _camera, waveModel);
             
-            gameScoreViewController.Initialize();
-            healthViewController.Initialize();
-            finalScoreViewController.Initialize();
-            _balloonController.Initialize();
-            
-            _gameStateMachine = new GameStateMachine(gameScoreViewController, finalScoreViewController, healthViewController, _balloonController, soundController);
+            _gameStateMachine = new GameStateMachine(gameScoreViewController, finalScoreViewController, healthViewController, _balloonController, soundController, startViewController);
             _gameStateController = new GameStateController(healthModel, waveModel, gameStateModel, _gameStateMachine);
-            _gameStateMachine.SetState(GameStateMachine.State.NextWave);
+            _gameStateMachine.SetState(GameStateMachine.State.Start);
         }
 
         private void OnDestroy()

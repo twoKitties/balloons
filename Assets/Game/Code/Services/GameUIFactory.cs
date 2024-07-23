@@ -58,5 +58,20 @@ namespace Game.Code.Services
             
             throw new MissingComponentException($"{nameof(FinalScoreView)} component is missing on Hud prefab");
         }
+        
+        public StartView CreateStartView()
+        {
+            if (_hudInstance == null)
+            {
+                _hudInstance = Object.Instantiate(_hudPrefab);
+            }
+            
+            if(_hudInstance.TryGetComponent<StartView>(out var view))
+            {
+                return view;
+            }
+            
+            throw new MissingComponentException($"{nameof(StartView)} component is missing on Hud prefab");
+        }
     }
 }
