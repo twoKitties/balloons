@@ -49,6 +49,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 387bc8abfd204865b7714210839ab60f
+    m_Address: Assets/Game/Core/GameConfig.json
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 57e4d6b991f6fa0438dd08c053f56a76, type: 2}
   m_SchemaSet:
