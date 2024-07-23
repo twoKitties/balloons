@@ -12,9 +12,9 @@ namespace Game.Code.Controllers
         private const string ErrorMessage = "Invalid player name";
         private readonly IPersistentDataService _persistentDataService;
         private readonly FinalScoreView _view;
-        private readonly ScoreModel _model;
+        private readonly GameStateModel _model;
 
-        public FinalScoreViewController(ScoreModel model, FinalScoreView view)
+        public FinalScoreViewController(GameStateModel model, FinalScoreView view)
         {
             _view = view;
             _model = model;

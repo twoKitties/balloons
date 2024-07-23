@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Game.Code.Core;
 using Game.Code.Models;
 using UnityEngine;
@@ -9,12 +8,8 @@ namespace Game.Code.Controllers
 {
     public class BalloonController : IDisposable
     {
-        public event Action<Balloon> OnBalloonLeft;
-        public event Action<Balloon> OnBalloonPopped;
-        public event Action OnWaveEnded;
         private readonly WaveModel _waveModel;
         private readonly Camera _camera;
-        private List<Balloon> _activeBalloons = new();
         private Pool<Balloon> _balloonPool;
         private Pool<BalloonExplosion> _effectPool;
         private float _screenTopVerticalThreshold;
@@ -34,8 +29,7 @@ namespace Game.Code.Controllers
 
         public void Dispose()
         {
-            _activeBalloons.Clear();
-            _activeBalloons = null;
+            _waveModel.Clear();
             _balloonPool = null;
             _effectPool = null;
         }
@@ -50,8 +44,8 @@ namespace Game.Code.Controllers
                 balloon.Position = spawnPosition;
                 balloon.StartPosition = spawnPosition;
                 balloon.OnClick += HandleClick;
-                balloon.gameObject.SetActive(true);
-                _activeBalloons.Add(balloon);
+                balloon.gameObject.SetActive(true); 
+                _waveModel.Add(balloon);
             }
 
             IncrementWaveIndex();
@@ -62,9 +56,9 @@ namespace Game.Code.Controllers
 
         public void Update(float deltaTime)
         {
-            for (var i = _activeBalloons.Count - 1; i >= 0; i--)
+            for (var i = _waveModel.ActiveBalloonsCount - 1; i >= 0; i--)
             {
-                var balloon = _activeBalloons[i];
+                var balloon = _waveModel[i];
                 var data = balloon.Data;
                 var y = balloon.Position.y + data.FloatSpeed * deltaTime;
                 var x = balloon.StartPosition.x + Mathf.Sin(Time.time * data.SwayAmount) * data.SwayAmount +
@@ -75,10 +69,10 @@ namespace Game.Code.Controllers
                 {
                     balloon.OnClick -= HandleClick;
                     balloon.gameObject.SetActive(false);
-                    _activeBalloons.RemoveAt(i);
+                    _waveModel.RemoveAt(i);
                     _balloonPool.Release(balloon);
-                    OnBalloonLeft?.Invoke(balloon);
-                    SignalIfWaveEnded();
+                    _waveModel.OnBalloonLeft(balloon);
+                    _waveModel.NotifyIfWaveEnded();
                 }
             }
         }
@@ -99,32 +93,24 @@ namespace Game.Code.Controllers
         public void Reset()
         {
             _waveModel.CurrentWaveIndex = 0;
-            for (var index = _activeBalloons.Count - 1; index >= 0; index--)
+            for (var index = _waveModel.ActiveBalloonsCount - 1; index >= 0; index--)
             {
-                var balloon = _activeBalloons[index];
+                var balloon = _waveModel[index];
+                _waveModel.RemoveAt(index);
                 _balloonPool.Release(balloon);
-                _activeBalloons.Remove(balloon);
             }
         }
-
-        private void SignalIfWaveEnded()
-        {
-            if (_activeBalloons.Count > 0)
-                return;
-
-            OnWaveEnded?.Invoke();
-        }
-
+        
         private void HandleClick(Balloon balloon)
         {
             balloon.OnClick -= HandleClick;
             balloon.gameObject.SetActive(false);
             var effect = _effectPool.Get();
             effect.PlayAt(balloon.Position, () => _effectPool.Release(effect));
-            _activeBalloons.Remove(balloon);
+            _waveModel.Remove(balloon);
             _balloonPool.Release(balloon);
-            OnBalloonPopped?.Invoke(balloon);
-            SignalIfWaveEnded();
+            _waveModel.OnBalloonPopped(balloon);
+            _waveModel.NotifyIfWaveEnded();
         }
 
         private Vector2 GetRandomSpawnPosition()

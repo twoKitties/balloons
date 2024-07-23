@@ -26,28 +26,28 @@ namespace Game.Code.EntryPoints
 
 
             var healthModel = new HealthModel { Current = 3, Max = 3 };
-            var scoreModel = new ScoreModel();
+            var gameStateModel = new GameStateModel();
             var waveModel = new WaveModel()
             {
                 CurrentWaveIndex = 0,
                 Waves = resourcesInitializer.WaveConfig.Waves,
             };
 
-            _gameScoreViewController = new GameScoreViewController(scoreModel, uiFactory.CreateGameScoreView());
+            _gameScoreViewController = new GameScoreViewController(gameStateModel, uiFactory.CreateGameScoreView());
             _healthViewController = new HealthViewController(healthModel, uiFactory.CreateHealthView());
-            _finalScoreViewController = new FinalScoreViewController(scoreModel, uiFactory.CreateFinalScoreView());
+            _finalScoreViewController = new FinalScoreViewController(gameStateModel, uiFactory.CreateFinalScoreView());
 
             _gameScoreViewController.Initialize();
             _healthViewController.Initialize();
             _finalScoreViewController.Initialize();
 
 
-            //TODO remake this creating a gamedata {healthdata, scoredata, resourcedata)
             _balloonController = new BalloonController(gameFactory, _camera, waveModel);
             _balloonController.Initialize();
             _balloonController.Spawn();
-            
-            var gameStateController = new GameStateController(healthModel, _finalScoreViewController, _balloonController, _gameScoreViewController, _healthViewController);
+
+            var gameStateMachine = new GameStateMachine(_gameScoreViewController, _finalScoreViewController, _healthViewController, _balloonController);
+            var gameStateController = new GameStateController(healthModel, waveModel, gameStateModel, gameStateMachine);
             _isInitialized = true;
         }
         
@@ -58,81 +58,6 @@ namespace Game.Code.EntryPoints
                 return;
 
             _balloonController.Update(Time.deltaTime);
-        }
-    }
-
-    public class GameStateMachine
-    {
-        // Initialize
-        // Start
-        // Pause
-        // Resume
-        // End
-        // Restart
-    }
-    
-    public class GameStateController
-    {
-        private readonly GameScoreViewController _gameScoreViewController;
-        private readonly FinalScoreViewController _finalScoreViewController;
-        private readonly HealthViewController _healthViewController;
-        private readonly BalloonController _balloonController;
-        private readonly HealthModel _healthModel;
-
-        public GameStateController(HealthModel healthModel, 
-            FinalScoreViewController finalScoreViewController,
-            BalloonController balloonController,
-            GameScoreViewController gameScoreViewController,
-            HealthViewController healthViewController)
-        {
-            _healthModel = healthModel;
-            _finalScoreViewController = finalScoreViewController;
-            _gameScoreViewController = gameScoreViewController;
-            _healthViewController = healthViewController;
-            _balloonController = balloonController;
-            
-            
-            _finalScoreViewController.OnReplay += Restart;
-            _balloonController.OnBalloonPopped += AddScore;
-            _balloonController.OnBalloonLeft += TakeLife;
-            _balloonController.OnWaveEnded += CheckGameCondition;
-        }
-        
-        private void CheckGameCondition()
-        {
-            if (_healthModel.Current <= 0)
-            {
-                _healthViewController.SetViewActive(false);
-                _gameScoreViewController.SetViewActive(false);
-                _finalScoreViewController.SetViewActive(true);
-            }
-            else
-            {
-                _balloonController.Spawn();
-            }
-        }
-        
-        private void AddScore(Balloon balloon)
-        {
-            //TODO maybe points per balloon popped should be in a wave config
-            _gameScoreViewController.AddScore(balloon.Data.PointsPerBalloon);
-        }
-
-        private void TakeLife(Balloon balloon)
-        {
-            //TODO maybe life per balloon lost should be in a wave config 
-            _healthViewController.Take(1);
-        }
-        
-        private void Restart()
-        {
-            _finalScoreViewController.Reset();
-            _gameScoreViewController.Initialize();
-            _gameScoreViewController.SetViewActive(true);
-            _healthViewController.Reset();
-            _healthViewController.SetViewActive(true);
-            _balloonController.Reset();
-            _balloonController.Spawn();
         }
     }
 }

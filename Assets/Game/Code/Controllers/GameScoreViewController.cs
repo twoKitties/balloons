@@ -6,9 +6,9 @@ namespace Game.Code.Controllers
     public class GameScoreViewController
     {
         private readonly ScoreView _view;
-        private readonly ScoreModel _model;
+        private readonly GameStateModel _model;
 
-        public GameScoreViewController(ScoreModel model, ScoreView view)
+        public GameScoreViewController(GameStateModel model, ScoreView view)
         {
             _view = view;
             _model = model;
