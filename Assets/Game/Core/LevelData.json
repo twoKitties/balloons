@@ -1,0 +1,44 @@
+﻿{
+  "Waves": [
+    {
+      "Balloons": 1,
+      "ScorePerBalloon": 100
+    },
+    {
+      "Balloons": 2,
+      "ScorePerBalloon": 100
+    },
+    {
+      "Balloons": 3,
+      "ScorePerBalloon": 100
+    },
+    {
+      "Balloons": 4,
+      "ScorePerBalloon": 100
+    },
+    {
+      "Balloons": 4,
+      "ScorePerBalloon": 100
+    },
+    {
+      "Balloons": 5,
+      "ScorePerBalloon": 100
+    },
+    {
+      "Balloons": 7,
+      "ScorePerBalloon": 100
+    },
+    {
+      "Balloons": 9,
+      "ScorePerBalloon": 100
+    },
+    {
+      "Balloons": 11,
+      "ScorePerBalloon": 100
+    },
+    {
+      "Balloons": 9,
+      "ScorePerBalloon": 100
+    }
+  ]
+}
