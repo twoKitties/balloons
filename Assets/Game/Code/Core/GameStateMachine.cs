@@ -1,4 +1,6 @@
-﻿namespace Game.Code.Controllers
+﻿using Game.Code.Controllers;
+
+namespace Game.Code.Core
 {
     public class GameStateMachine
     {

@@ -22,7 +22,8 @@ namespace Game.Code.Controllers
             _gameStateModel.onRestart += Restart;
             _waveModel.onBalloonLeft += TakeLife;
             _waveModel.onBalloonPopped += AddScore;
-            _waveModel.onWaveEnded += CheckGameCondition;
+            _waveModel.onWaveEnded += SpawnWave;
+            _healthModel.onHealthChanged += CheckGameCondition;
         }
 
         public void Dispose()
@@ -30,14 +31,22 @@ namespace Game.Code.Controllers
             _gameStateModel.onRestart -= Restart;
             _waveModel.onBalloonLeft -= TakeLife;
             _waveModel.onBalloonPopped -= AddScore;
-            _waveModel.onWaveEnded -= CheckGameCondition;
+            _waveModel.onWaveEnded -= SpawnWave;
+            _healthModel.onHealthChanged -= CheckGameCondition;
+        }
+
+        private void SpawnWave()
+        {
+            _gsm.SetState(GameStateMachine.State.NextWave);
         }
 
         private void CheckGameCondition()
         {
-            _gsm.SetState(_healthModel.Current <= 0
-                ? GameStateMachine.State.ShowResult
-                : GameStateMachine.State.NextWave);
+            if(_healthModel.Current > 0)
+                return;
+
+            _waveModel.onWaveEnded -= SpawnWave;
+            _gsm.SetState(GameStateMachine.State.ShowResult);
         }
 
         private void AddScore(Balloon balloon)
@@ -52,6 +61,7 @@ namespace Game.Code.Controllers
 
         private void Restart()
         {
+            _waveModel.onWaveEnded += SpawnWave;
             _gsm.SetState(GameStateMachine.State.Restart);
         }
     }
