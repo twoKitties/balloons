@@ -28,5 +28,10 @@ namespace Game.Code.UI
 
         private void ExitButtonClickedHandler() => 
             OnExitClicked?.Invoke();
+
+        public void EnableExitButton(bool isActive)
+        {
+            _exitButton.gameObject.SetActive(isActive);
+        }
     }
 }
