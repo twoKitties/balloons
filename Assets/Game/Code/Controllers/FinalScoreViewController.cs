@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Game.Code.Data;
 using Game.Code.Models;
 using Game.Code.Services;
@@ -52,8 +53,9 @@ namespace Game.Code.Controllers
 
         private void RefreshEntries(PlayerData savedData)
         {
+            var sorted = savedData.Entries.OrderByDescending(item => item.Score);
             _view.Clear();
-            foreach (var entry in savedData.Entries)
+            foreach (var entry in sorted)
             {
                 _view.AddEntry(entry.PlayerName, entry.Score.ToString());
             }
