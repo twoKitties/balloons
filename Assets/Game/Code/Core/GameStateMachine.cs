@@ -9,7 +9,7 @@ namespace Game.Code.Core
             None,
             NextWave,
             ShowResult,
-            AddScore,
+            BalloonPopped,
             TakeLife,
             Restart,
             Pause,
@@ -20,17 +20,20 @@ namespace Game.Code.Core
         private readonly FinalScoreViewController _finalScoreViewController;
         private readonly HealthViewController _healthViewController;
         private readonly BalloonController _balloonController;
+        private readonly SoundController _soundController;
 
         public GameStateMachine(
             GameScoreViewController gameScoreViewController, 
             FinalScoreViewController finalScoreViewController, 
             HealthViewController healthViewController, 
-            BalloonController balloonController)
+            BalloonController balloonController,
+            SoundController soundController)
         {
             _gameScoreViewController = gameScoreViewController;
             _finalScoreViewController = finalScoreViewController;
             _healthViewController = healthViewController;
             _balloonController = balloonController;
+            _soundController = soundController;
         }
 
 
@@ -47,8 +50,9 @@ namespace Game.Code.Core
                     _gameScoreViewController.SetViewActive(false);
                     _finalScoreViewController.SetViewActive(true);
                     break;
-                case State.AddScore:
+                case State.BalloonPopped:
                     _gameScoreViewController.AddScore(100);
+                    _soundController.Play();
                     break;
                 case State.TakeLife:
                     _healthViewController.Take(1);

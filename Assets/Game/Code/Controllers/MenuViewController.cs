@@ -13,8 +13,18 @@ namespace Game.Code.Controllers
         {
             _runner = runner;
             _menuView = menuView;
+            
+        }
+
+        public void Initialize()
+        {
             _menuView.OnStartClicked += LoadCore;
             _menuView.OnExitClicked += ExitGame;
+#if UNITY_EDITOR
+            _menuView.EnableExitButton(true);
+#else
+            _menuView.EnableExitButton(false);
+#endif
         }
 
         public void Dispose()
@@ -33,8 +43,6 @@ namespace Game.Code.Controllers
         {
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
-#else
-            Application.Quit();
 #endif
         }
     }

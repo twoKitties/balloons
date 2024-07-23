@@ -64,6 +64,7 @@ namespace Game.Code.Controllers
                 var x = balloon.StartPosition.x + Mathf.Sin(Time.time * data.SwayAmount) * data.SwayAmount +
                         Mathf.Sin(3.1415f * data.SwayAmount);
                 balloon.Position = new Vector3(x, y, 0);
+                balloon.Rotation = Mathf.Sin(x) + Mathf.Sin(y);
 
                 if (balloon.Position.y > _screenTopVerticalThreshold + 2)
                 {

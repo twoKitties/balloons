@@ -1,3 +1,4 @@
+using System;
 using Game.Code.Controllers;
 using Game.Code.Core;
 using Game.Code.Models;
@@ -9,6 +10,7 @@ namespace Game.Code.EntryPoints
     public class CoreEntryPoint : MonoBehaviour
     {
         [SerializeField] private Camera _camera;
+        [SerializeField] private AudioSource _audioSource; 
         private GameStateController _gameStateController;
         private BalloonController _balloonController;
         private GameStateMachine _gameStateMachine;
@@ -33,6 +35,7 @@ namespace Game.Code.EntryPoints
             var gameScoreViewController = new GameScoreViewController(gameStateModel, uiFactory.CreateGameScoreView());
             var healthViewController = new HealthViewController(healthModel, uiFactory.CreateHealthView());
             var finalScoreViewController = new FinalScoreViewController(gameStateModel, uiFactory.CreateFinalScoreView());
+            var soundController = new SoundController(_audioSource, resourcesInitializer.PopSound);
             _balloonController = new BalloonController(gameFactory, _camera, waveModel);
             
             gameScoreViewController.Initialize();
@@ -40,7 +43,7 @@ namespace Game.Code.EntryPoints
             finalScoreViewController.Initialize();
             _balloonController.Initialize();
             
-            _gameStateMachine = new GameStateMachine(gameScoreViewController, finalScoreViewController, healthViewController, _balloonController);
+            _gameStateMachine = new GameStateMachine(gameScoreViewController, finalScoreViewController, healthViewController, _balloonController, soundController);
             _gameStateController = new GameStateController(healthModel, waveModel, gameStateModel, _gameStateMachine);
             _gameStateMachine.SetState(GameStateMachine.State.NextWave);
         }

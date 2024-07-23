@@ -51,7 +51,7 @@ namespace Game.Code.Controllers
 
         private void AddScore(Balloon balloon)
         {
-            _gsm.SetState(GameStateMachine.State.AddScore);
+            _gsm.SetState(GameStateMachine.State.BalloonPopped);
         }
 
         private void TakeLife(Balloon balloon)

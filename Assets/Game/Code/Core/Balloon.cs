@@ -16,6 +16,12 @@ namespace Game.Code.Core
             set => transform.position = value;
         }
 
+        public float Rotation
+        {
+            get => transform.rotation.eulerAngles.z;
+            set => transform.rotation = Quaternion.Euler(0, 0, value);
+        }
+
         public void OnPointerClick(PointerEventData eventData)
         {
             OnClick?.Invoke(this);

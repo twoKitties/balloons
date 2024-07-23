@@ -13,6 +13,7 @@ namespace Game.Code.EntryPoints
         {
             var menuView = Instantiate(_menuView);
             _menuViewController = new MenuViewController(this, menuView);
+            _menuViewController.Initialize();
         }
 
         private void OnDestroy()

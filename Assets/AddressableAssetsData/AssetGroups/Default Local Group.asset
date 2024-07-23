@@ -54,6 +54,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4e81466230a2bc942b7dbb9d17c05df6
+    m_Address: Assets/Game/Core/BalloonPop.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 57e4d6b991f6fa0438dd08c053f56a76, type: 2}
   m_SchemaSet:

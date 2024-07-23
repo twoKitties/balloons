@@ -14,6 +14,7 @@ namespace Game.Code.Core
         public GameObject HUDPrefab { get; private set; }
         public WaveConfig WaveConfig { get; private set; }
         public GameStateConfig GameStateConfig { get; private set; }
+        public AudioClip PopSound { get; private set; }
 
         private readonly IResourceProvider _resourceProvider;
 
@@ -35,6 +36,8 @@ namespace Game.Code.Core
                 BalloonPrefab = prefab.GetComponent<Balloon>();
                 prefab = await _resourceProvider.LoadAsync<GameObject>("Assets/Game/Core/BalloonExplosion.prefab");
                 EffectPrefab = prefab.GetComponent<BalloonExplosion>();
+                var sound = await _resourceProvider.LoadAsync<AudioClip>("Assets/Game/Core/BalloonPop.mp3");
+                PopSound = sound;
             }
             catch (Exception e)
             {
