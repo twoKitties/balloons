@@ -9,7 +9,6 @@ namespace Game.Code.Controllers
 {
     public class FinalScoreViewController : IDisposable
     {
-        public event Action OnReplay; 
         private const string ErrorMessage = "Invalid player name";
         private readonly IPersistentDataService _persistentDataService;
         private readonly FinalScoreView _view;
@@ -63,7 +62,7 @@ namespace Game.Code.Controllers
 
         private void Replay()
         {
-            OnReplay?.Invoke();
+            _model.OnRestart();
         }
 
         private void Save(string playerName)
